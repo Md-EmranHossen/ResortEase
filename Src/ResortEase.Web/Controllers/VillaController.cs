@@ -25,9 +25,15 @@ namespace ResortEase.Web.Controllers
             return View();
         }
 
-
+        [HttpPost]
         public IActionResult Create(Villa obj)
         {
+            if(ModelState.IsValid)
+            {
+                _db.Villas.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index", "Villa");
+            }
             return View();
         }
     }
