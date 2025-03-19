@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ResortEase.Domain.Entities;
 using ResortEase.Infrastructure.Data;
 
 namespace ResortEase.Web.Controllers
@@ -21,7 +22,12 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Create()
         {
+            return View();
+        }
 
+
+        public IActionResult Create(Villa obj)
+        {
             return View();
         }
     }
