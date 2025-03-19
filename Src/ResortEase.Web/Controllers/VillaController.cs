@@ -15,7 +15,7 @@ namespace ResortEase.Web.Controllers
         public IActionResult Index()
         {
             var villas = _db.Villas.ToList();
-            return View();
+            return View(villas);
         }
     }
 }
