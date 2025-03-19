@@ -30,7 +30,7 @@ namespace ResortEase.Web.Controllers
         {
             if(obj.Name == obj.Description)
             {
-                ModelState.AddModelError("","The description cannot exactly match the Name");
+                ModelState.AddModelError("name","The description cannot exactly match the Name");
             }
 
 
