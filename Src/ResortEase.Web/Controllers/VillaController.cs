@@ -40,7 +40,7 @@ namespace ResortEase.Web.Controllers
                 _db.SaveChanges();
                 TempData["success"] = "The villa has been created successfully.";
 
-                return RedirectToAction("Index", "Villa");
+                return RedirectToAction(nameof(Index));
             }
             return View();
         }
@@ -65,7 +65,7 @@ namespace ResortEase.Web.Controllers
                 _db.SaveChanges();
                 TempData["success"] = "The villa has been updated successfully.";
 
-                return RedirectToAction("Index", "Villa");
+                return RedirectToAction(nameof(Index));
             }
             return View();
         }
