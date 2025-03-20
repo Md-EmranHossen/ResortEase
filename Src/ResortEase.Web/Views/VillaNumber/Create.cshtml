@@ -14,7 +14,13 @@
                    <div asp-validation-summary="None"></div>
                *@ 
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="VillaId" class="form-control border shadow" />
+
+                    <select asp-for="VillaId" asp-items="@ViewData["VillaList"] as IEnumerable<SelectListItem>"
+                            class="form-select border shadow">
+                        <option disabled selected>--Select Villa--</option>
+                    </select>
+
+
                     <label asp-for="VillaId" class="ms-2"></label>
                     <span asp-validation-for="VillaId" class="text-danger"></span>
                 </div>
@@ -30,7 +36,7 @@
                     <span asp-validation-for="SpecialDetails" class="text-danger"></span>
 
                 </div>
-             
+
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
                         <button type="submit" class="btn btn-success w-100">
