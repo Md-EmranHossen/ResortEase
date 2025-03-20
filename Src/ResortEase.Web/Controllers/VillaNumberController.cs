@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using ResortEase.Domain.Entities;
 using ResortEase.Infrastructure.Data;
 using ResortEase.Web.ViewModels;
@@ -17,7 +18,7 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Index()
         {
-            var VillaNumbers = _db.VillaNumbers.ToList();
+            var VillaNumbers = _db.VillaNumbers.Include(u=>u.Villa).ToList();
             return View(VillaNumbers);
         }
 
