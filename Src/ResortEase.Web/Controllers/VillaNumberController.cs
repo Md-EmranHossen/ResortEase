@@ -23,13 +23,13 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> list = _db.Villas.ToList().Select(u=>new SelectListItem
+            IEnumerable<SelectListItem> list = _db.Villas.ToList().Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
             });
 
-            ViewData["VillaList"] = list;
+            ViewBag.VillaList = list;
 
             return View();
         }
@@ -51,6 +51,6 @@ namespace ResortEase.Web.Controllers
             return View();
         }
 
-       
+
     }
 }
