@@ -56,6 +56,13 @@ namespace ResortEase.Web.Controllers
                 TempData["error"] = "The Villa Number already exist";
             }
 
+
+            obj.VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+
             return View(obj);
         }
 
