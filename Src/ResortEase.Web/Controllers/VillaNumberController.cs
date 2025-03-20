@@ -18,7 +18,7 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Index()
         {
-            var VillaNumbers = _db.VillaNumbers.Include(u=>u.Villa).ToList();
+            var VillaNumbers = _db.VillaNumbers.Include(u => u.Villa).ToList();
             return View(VillaNumbers);
         }
 
@@ -37,20 +37,26 @@ namespace ResortEase.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(VillaNumber obj)
+        public IActionResult Create(VillaNumberVM obj)
         {
+            // ModelState.Remove("Villa");
 
+            bool roomNumberExist = _db.VillaNumbers.Any(u => u.Villa_Number == obj.VillaNumber.Villa_Number);
 
-            ModelState.Remove("Villa");
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !roomNumberExist)
             {
-                _db.VillaNumbers.Add(obj);
+                _db.VillaNumbers.Add(obj.VillaNumber);
                 _db.SaveChanges();
                 TempData["success"] = "The Villa Number has been created successfully.";
 
                 return RedirectToAction("Index", "VillaNumber");
             }
-            return View();
+            if (roomNumberExist)
+            {
+                TempData["error"] = "The Villa Number already exist";
+            }
+
+            return View(obj);
         }
 
 
