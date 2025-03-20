@@ -67,5 +67,63 @@ namespace ResortEase.Web.Controllers
         }
 
 
+
+
+
+
+        public IActionResult Update(int villaNumberId)
+        {
+
+            VillaNumberVM villaNumberVM = new()
+            {
+                VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                VillaNumber = _db.VillaNumbers.FirstOrDefault(u=>u.Villa_Number == villaNumberId)
+            };
+
+
+            if (villaNumberVM.VillaNumber == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            return View(villaNumberVM);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Update(VillaNumberVM obj)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _db.VillaNumbers.Update(obj.VillaNumber);
+                _db.SaveChanges();
+                TempData["success"] = "The Villa Number has been updated successfully.";
+
+                return RedirectToAction("Index", "VillaNumber");
+            }
+            
+
+            obj.VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+
+            return View(obj);
+        }
+
+
+
+
+
+
+
+
     }
 }
