@@ -28,15 +28,66 @@ namespace ResortEase.Web.Controllers
         [HttpPost]
         public IActionResult Create(Villa obj)
         {
-            if(obj.Name == obj.Description)
+            if (obj.Name == obj.Description)
             {
-                ModelState.AddModelError("name","The description cannot exactly match the Name");
+                ModelState.AddModelError("name", "The description cannot exactly match the Name");
             }
 
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.Villas.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index", "Villa");
+            }
+            return View();
+        }
+
+
+        public IActionResult Update(int id)
+        {
+            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == id);
+            if (obj == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Villa obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Villas.Update(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index", "Villa");
+            }
+            return View();
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == id);
+
+
+            if (obj == null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Villa obj)
+        {
+            Villa? objfromDb = _db.Villas.FirstOrDefault(u => u.Id == obj.Id);
+            if (obj != null)
+            {
+                _db.Villas.Remove(objfromDb);
                 _db.SaveChanges();
                 return RedirectToAction("Index", "Villa");
             }
