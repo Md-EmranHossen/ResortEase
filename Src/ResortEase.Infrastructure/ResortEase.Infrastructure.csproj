@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ResortEase.Domain\ResortEase.Domain.csproj" />
+    <ProjectReference Include="..\ResortEase.Application\ResortEase.Application.csproj" />
   </ItemGroup>
 
 </Project>
