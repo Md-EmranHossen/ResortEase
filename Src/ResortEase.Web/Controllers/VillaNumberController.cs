@@ -19,11 +19,9 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Index()
         {
-            var VillaNumbers = _unitOfWork.VillaNumber.GetAll(includeProperties: "Villa");
-
-            return View(VillaNumbers);
+            var villaNumbers = _unitOfWork.VillaNumber.GetAll(includeProperties: "Villa");
+            return View(villaNumbers);
         }
-
 
         public IActionResult Create()
         {
@@ -41,36 +39,32 @@ namespace ResortEase.Web.Controllers
         [HttpPost]
         public IActionResult Create(VillaNumberVM obj)
         {
-            // ModelState.Remove("Villa");
+            //ModelState.Remove("Villa");
 
-            bool roomNumberExist = _unitOfWork.VillaNumber.Any(u => u.Villa_Number == obj.VillaNumber.Villa_Number);
+            bool roomNumberExists = _unitOfWork.VillaNumber.Any(u => u.Villa_Number == obj.VillaNumber.Villa_Number);
 
-            if (ModelState.IsValid && !roomNumberExist)
+            if (ModelState.IsValid && !roomNumberExists)
             {
                 _unitOfWork.VillaNumber.Add(obj.VillaNumber);
                 _unitOfWork.Save();
-                TempData["success"] = "The Villa Number has been created successfully.";
-
+                TempData["success"] = "The villa Number has been created successfully.";
                 return RedirectToAction(nameof(Index));
             }
-            if (roomNumberExist)
+
+            if (roomNumberExists)
             {
-                TempData["error"] = "The Villa Number already exist";
+                TempData["error"] = "The villa Number already exists.";
             }
-
-
             obj.VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
             });
-
             return View(obj);
         }
 
         public IActionResult Update(int villaNumberId)
         {
-
             VillaNumberVM villaNumberVM = new()
             {
                 VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
@@ -80,46 +74,38 @@ namespace ResortEase.Web.Controllers
                 }),
                 VillaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == villaNumberId)
             };
-
-
             if (villaNumberVM.VillaNumber == null)
             {
                 return RedirectToAction("Error", "Home");
             }
-
             return View(villaNumberVM);
         }
 
 
-
         [HttpPost]
-        public IActionResult Update(VillaNumberVM obj)
+        public IActionResult Update(VillaNumberVM villaNumberVM)
         {
 
             if (ModelState.IsValid)
             {
-                _unitOfWork.VillaNumber.Update(obj.VillaNumber);
+                _unitOfWork.VillaNumber.Update(villaNumberVM.VillaNumber);
                 _unitOfWork.Save();
-                TempData["success"] = "The Villa Number has been updated successfully.";
-
+                TempData["success"] = "The villa Number has been updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
-
-            obj.VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
+            villaNumberVM.VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
             });
-
-            return View(obj);
+            return View(villaNumberVM);
         }
 
 
 
         public IActionResult Delete(int villaNumberId)
         {
-
             VillaNumberVM villaNumberVM = new()
             {
                 VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
@@ -129,32 +115,28 @@ namespace ResortEase.Web.Controllers
                 }),
                 VillaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == villaNumberId)
             };
-
-
             if (villaNumberVM.VillaNumber == null)
             {
                 return RedirectToAction("Error", "Home");
             }
-
             return View(villaNumberVM);
         }
+
+
 
         [HttpPost]
         public IActionResult Delete(VillaNumberVM villaNumberVM)
         {
-
             VillaNumber? objFromDb = _unitOfWork.VillaNumber
                 .Get(u => u.Villa_Number == villaNumberVM.VillaNumber.Villa_Number);
-
             if (objFromDb is not null)
             {
                 _unitOfWork.VillaNumber.Remove(objFromDb);
                 _unitOfWork.Save();
-                TempData["success"] = "The Villa Number has been deleted successfully.";
-
+                TempData["success"] = "The villa number has been deleted successfully.";
                 return RedirectToAction(nameof(Index));
             }
-            TempData["error"] = "The Villa Number could not be deleted";
+            TempData["error"] = "The villa number could not be deleted.";
             return View();
         }
     }
