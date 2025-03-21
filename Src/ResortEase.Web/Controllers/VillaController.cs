@@ -7,16 +7,16 @@ namespace ResortEase.Web.Controllers
 {
     public class VillaController : Controller
     {
-        private readonly IVillaRepository _villaRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public VillaController(IVillaRepository vilaRepo)
+        public VillaController(IUnitOfWork unitOfWork)
         {
-            _villaRepo = vilaRepo;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            var villas = _villaRepo.GetAll();
+            var villas = _unitOfWork.Villa.GetAll();
             return View(villas);
         }
 
@@ -37,8 +37,8 @@ namespace ResortEase.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _villaRepo.Add(obj);
-                _villaRepo.Save();
+                _unitOfWork.Villa.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "The villa has been created successfully.";
 
                 return RedirectToAction(nameof(Index));
@@ -48,7 +48,7 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Update(int villaId)
         {
-            Villa? obj = _villaRepo.Get(u => u.Id == villaId);
+            Villa? obj = _unitOfWork.Villa.Get(u => u.Id == villaId);
             if (obj == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -62,8 +62,8 @@ namespace ResortEase.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _villaRepo.Update(obj);
-                _villaRepo.Save();
+                _unitOfWork.Villa.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "The villa has been updated successfully.";
 
                 return RedirectToAction(nameof(Index));
@@ -74,7 +74,7 @@ namespace ResortEase.Web.Controllers
 
         public IActionResult Delete(int id)
         {
-            Villa? obj = _villaRepo.Get(u => u.Id == id);
+            Villa? obj = _unitOfWork.Villa.Get(u => u.Id == id);
 
 
             if (obj == null)
@@ -88,11 +88,11 @@ namespace ResortEase.Web.Controllers
         [HttpPost]
         public IActionResult Delete(Villa obj)
         {
-            Villa? objfromDb = _villaRepo.Get(u => u.Id == obj.Id);
+            Villa? objfromDb = _unitOfWork.Villa.Get(u => u.Id == obj.Id);
             if (obj != null)
             {
-                _villaRepo.Remove(objfromDb);
-                _villaRepo.Save();
+                _unitOfWork.Villa.Remove(objfromDb);
+                _unitOfWork.Save();
                 TempData["success"] = "The villa has been deleted successfully.";
                 return RedirectToAction("Index", "Villa");
             }
