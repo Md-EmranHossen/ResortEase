@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResortEase.Application.Common.Interfaces;
+using ResortEase.Application.Common.Utility;
 using ResortEase.Domain.Entities;
 using ResortEase.Infrastructure.Data;
 
 namespace ResortEase.Web.Controllers
 {
+    [Authorize]
     public class VillaController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
